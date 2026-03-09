@@ -32,6 +32,13 @@
         {
           "origin": "https://uber.dev/"
         }
+      ],
+      "expo-secure-store",
+      [
+        "@stripe/stripe-react-native",
+        {
+          "merchantIdentifier": "merchant.com.example"
+        }
       ]
     ],
     "experiments": {
