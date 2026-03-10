@@ -13,7 +13,6 @@ const Rides = () => {
   const {
     data: recentRides,
     loading,
-    error,
   } = useFetch<Ride[]>(`/(api)/ride/${user?.id}`);
 
   return (
@@ -54,4 +53,4 @@ const Rides = () => {
   );
 };
 
-export default Rides;  
+export default Rides;

@@ -19,7 +19,10 @@ if (!publishableKey) {
   );
 }
 
-LogBox.ignoreLogs(["Clerk:"]);
+LogBox.ignoreLogs([
+  "Clerk:",
+  "SafeAreaView has been deprecated and will be removed in a future release.",
+]);
 
 export default function RootLayout() {
   const [loaded] = useFonts({

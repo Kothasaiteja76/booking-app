@@ -27,7 +27,7 @@ const SignIn = () => {
 
       if (signInAttempt.status === "complete") {
         await setActive({ session: signInAttempt.createdSessionId });
-        router.replace("/(root)/(tabs)/home");
+        router.replace("/root/(tabs)/home");
       } else {
         // See https://clerk.com/docs/custom-flows/error-handling for more info on error handling
         console.log(JSON.stringify(signInAttempt, null, 2));
@@ -37,7 +37,7 @@ const SignIn = () => {
       console.log(JSON.stringify(err, null, 2));
       Alert.alert("Error", err.errors[0].longMessage);
     }
-  }, [isLoaded, form]);
+  }, [isLoaded, form, setActive, signIn]);
 
   return (
     <ScrollView className="flex-1 bg-white">
@@ -81,7 +81,7 @@ const SignIn = () => {
             href="/sign-up"
             className="text-lg text-center text-general-200 mt-10"
           >
-            Don't have an account?{" "}
+            Don&apos;t have an account?{" "}
             <Text className="text-primary-500">Sign Up</Text>
           </Link>
         </View>

@@ -1,8 +1,7 @@
-import { useUser } from "@clerk/clerk-expo";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth, useUser } from "@clerk/clerk-expo";
 import * as Location from "expo-location";
 import { router } from "expo-router";
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import {
   Text,
   View,
@@ -14,7 +13,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import GoogleTextInput from "@/components/GoogleTextInput";
-import Map from "@/components/Map";
+import Map from "@/components/map";
 import RideCard from "@/components/RideCard";
 import { icons, images } from "@/constants";
 import { useFetch } from "@/lib/fetch";
@@ -32,19 +31,15 @@ const Home = () => {
     router.replace("/(auth)/sign-in");
   };
 
-  const [hasPermission, setHasPermission] = useState<boolean>(false);
-
   const {
     data: recentRides,
     loading,
-    error,
   } = useFetch<Ride[]>(`/(api)/ride/${user?.id}`);
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        setHasPermission(false);
         return;
       }
 
@@ -61,7 +56,7 @@ const Home = () => {
         address: `${address[0].name}, ${address[0].region}`,
       });
     })();
-  }, []);
+  }, [setUserLocation]);
 
   const handleDestinationPress = (location: {
     latitude: number;

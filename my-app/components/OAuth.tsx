@@ -7,18 +7,25 @@ import { icons } from "@/constants";
 // import { googleOAuth } from "@/lib/auth";
 
 const OAuth = () => {
- const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
-
+  const { startOAuthFlow } = useOAuth({ strategy: "oauth_google" });
 
   const handleGoogleSignIn = async () => {
-const result = await startOAuthFlow();
+    try {
+      const { createdSessionId, setActive } = await startOAuthFlow();
 
-    if (result.code === "session_exists") {
-      Alert.alert("Success", "Session exists. Redirecting to home screen.");
-      router.replace("/root/(tabs)/home");
+      if (createdSessionId) {
+        await setActive?.({ session: createdSessionId });
+        Alert.alert("Success", "Signed in successfully.");
+        router.replace("/root/(tabs)/home");
+        return;
+      }
+
+      Alert.alert("Error", "Sign-in could not be completed.");
+    } catch (err: any) {
+      const message =
+        err?.errors?.[0]?.longMessage || "Google sign-in failed. Try again.";
+      Alert.alert("Error", message);
     }
-
-    Alert.alert(result.success ? "Success" : "Error", result.message);
   };
 
   return (

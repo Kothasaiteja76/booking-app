@@ -29,7 +29,7 @@ const Map = () => {
 
   useEffect(() => {
     if (Array.isArray(drivers)) {
-      if (!userLatitude || !userLongitude) return;
+      if (userLatitude == null || userLongitude == null) return;
 
       const newMarkers = generateMarkersFromData({
         data: drivers,
@@ -44,8 +44,10 @@ const Map = () => {
   useEffect(() => {
     if (
       markers.length > 0 &&
-      destinationLatitude !== undefined &&
-      destinationLongitude !== undefined
+      destinationLatitude != null &&
+      destinationLongitude != null &&
+      userLatitude != null &&
+      userLongitude != null
     ) {
       calculateDriverTimes({
         markers,
@@ -54,10 +56,19 @@ const Map = () => {
         destinationLatitude,
         destinationLongitude,
       }).then((drivers) => {
-        setDrivers(drivers as MarkerData[]);
+        if (drivers) {
+          setDrivers(drivers as MarkerData[]);
+        }
       });
     }
-  }, [markers, destinationLatitude, destinationLongitude]);
+  }, [
+    markers,
+    destinationLatitude,
+    destinationLongitude,
+    setDrivers,
+    userLatitude,
+    userLongitude,
+  ]);
 
   const region = calculateRegion({
     userLatitude,
@@ -66,9 +77,9 @@ const Map = () => {
     destinationLongitude,
   });
 
-  if (loading || (!userLatitude && !userLongitude))
+  if (loading || userLatitude == null || userLongitude == null)
     return (
-      <View className="flex justify-between items-center w-full">
+      <View className="flex-1 justify-center items-center w-full">
         <ActivityIndicator size="small" color="#000" />
       </View>
     );
@@ -91,7 +102,7 @@ const Map = () => {
       showsUserLocation={true}
       userInterfaceStyle="light"
     >
-      {markers.map((marker, index) => (
+      {markers.map((marker) => (
         <Marker
           key={marker.id}
           coordinate={{
@@ -105,7 +116,7 @@ const Map = () => {
         />
       ))}
 
-      {destinationLatitude && destinationLongitude && (
+      {destinationLatitude != null && destinationLongitude != null && (
         <>
           <Marker
             key="destination"
