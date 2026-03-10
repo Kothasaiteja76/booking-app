@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, Platform, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 
@@ -24,7 +24,7 @@ const Map = () => {
   } = useLocationStore();
   const { selectedDriver, setDrivers } = useDriverStore();
 
-  const { data: drivers, loading, error } = useFetch<Driver[]>("/(api)/driver");
+  const { data: drivers, loading, error } = useFetch<Driver[]>("/driver");
   const [markers, setMarkers] = useState<MarkerData[]>([]);
 
   useEffect(() => {
@@ -77,6 +77,9 @@ const Map = () => {
     destinationLongitude,
   });
 
+  const mapTypeProps =
+    Platform.OS === "ios" ? { mapType: "mutedStandard" } : {};
+
   if (loading || userLatitude == null || userLongitude == null)
     return (
       <View className="flex-1 justify-center items-center w-full">
@@ -96,7 +99,7 @@ const Map = () => {
       provider={PROVIDER_DEFAULT}
       className="w-full h-full rounded-2xl"
       tintColor="black"
-      mapType="mutedStandard"
+      {...mapTypeProps}
       showsPointsOfInterest={false}
       initialRegion={region}
       showsUserLocation={true}

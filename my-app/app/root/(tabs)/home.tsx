@@ -34,7 +34,7 @@ const Home = () => {
   const {
     data: recentRides,
     loading,
-  } = useFetch<Ride[]>(`/(api)/ride/${user?.id}`);
+  } = useFetch<Ride[]>(`/ride/${user?.id}`);
 
   useEffect(() => {
     (async () => {
